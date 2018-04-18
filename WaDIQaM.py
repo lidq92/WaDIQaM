@@ -212,8 +212,8 @@ if __name__ == '__main__':
                         SROCC, KROCC, PLCC, RMSE, OR, test_index))
             f.close()
 
-            torch.save(model.state_dict(), trained_model_file)
-            torch.save(model, trained_model_file + '.full')
+            torch.save(net.state_dict(), trained_model_file)
+            torch.save(net, trained_model_file + '.full')
             best_val_criterion = val_loss  # update best val
 
     # Test
