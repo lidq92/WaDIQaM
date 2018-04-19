@@ -30,17 +30,16 @@ def RandomCropPatches(im, ref, model_type='FR', th=32, tw=32, n_patches=32):
 
 
 def FullyNonoverlappingCropPatches(im, ref, model_type='FR', 
-                                   th=32, tw=32, n_patches=32):
+                                   th=32, tw=32):
     w, h = im.size
     crops = ()
     ref_crops = ()
-    for k in range(n_patches):
-        for i in range(0, th, h - th):
-            for j in range(0, tw, w - tw):
-                crops = (to_tensor(im.crop((j, i, j + tw, i + th))),) + crops
-                if model_type=='FR':
-                    ref_crop = to_tensor(ref.crop((j, i, j + tw, i + th)))
-                    ref_crops = (ref_crop,) + ref_crops
+    for i in range(0, th, h - th):
+        for j in range(0, tw, w - tw):
+            crops = (to_tensor(im.crop((j, i, j + tw, i + th))),) + crops
+            if model_type=='FR':
+                ref_crop = to_tensor(ref.crop((j, i, j + tw, i + th)))
+                ref_crops = (ref_crop,) + ref_crops
     return (torch.stack(crops),torch.stack(ref_crops))
 
 
