@@ -29,20 +29,6 @@ def RandomCropPatches(im, ref, model_type='FR', th=32, tw=32, n_patches=32):
     return (torch.stack(crops),torch.stack(ref_crops))
 
 
-def FullyNonoverlappingCropPatches(im, ref, model_type='FR', 
-                                   th=32, tw=32):
-    w, h = im.size
-    crops = ()
-    ref_crops = ()
-    for i in range(0, h - th, th):
-        for j in range(0, w - tw, tw):
-            crops = (to_tensor(im.crop((j, i, j + tw, i + th))),) + crops
-            if model_type=='FR':
-                ref_crop = to_tensor(ref.crop((j, i, j + tw, i + th)))
-                ref_crops = (ref_crop,) + ref_crops
-    return (torch.stack(crops),torch.stack(ref_crops))
-
-
 class IQADataset(Dataset):
     def __init__(self, conf, EXP_ID, status='train', loader=default_loader):
         self.loader = loader
