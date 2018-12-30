@@ -34,8 +34,8 @@ def FullyNonoverlappingCropPatches(im, ref, model_type='FR',
     w, h = im.size
     crops = ()
     ref_crops = ()
-    for i in range(0, th, h - th):
-        for j in range(0, tw, w - tw):
+    for i in range(0, h - th, th):
+        for j in range(0, w - tw, tw):
             crops = (to_tensor(im.crop((j, i, j + tw, i + th))),) + crops
             if model_type=='FR':
                 ref_crop = to_tensor(ref.crop((j, i, j + tw, i + th)))
