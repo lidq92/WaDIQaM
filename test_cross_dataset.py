@@ -14,7 +14,6 @@ import torch.nn.functional as F
 from torch.autograd import Variable
 from PIL import Image
 from IQADataset import RandomCropPatches
-from IQAmodel import FRnet, NRnet
 import numpy as np
 import h5py, os
 
