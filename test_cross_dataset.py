@@ -119,7 +119,7 @@ if __name__ == "__main__":
     im_names = [Info[Info['im_names'][0, :][i]].value.tobytes()\
                         [::2].decode() for i in range(len(Info['im_names'][0, :]))]
     ref_names = [Info[Info['ref_names'][0, :][i]].value.tobytes()\
-                        [::2].decode() for i in range(len(Info['ref_names'][0, :]))]
+                        [::2].decode() for i in (Info['ref_ids'][0, :]-1).astype(int)]
 
     model.eval()
     scores = []   
