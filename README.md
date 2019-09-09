@@ -6,5 +6,5 @@ Bosse S, Maniry D, Müller K R, et al. [Deep neural networks for no-reference an
 You can refer to the [chainer](https://chainer.org/) codes (only the test part) from the original authors: [dmaniry/deepIQA](https://github.com/dmaniry/deepIQA)
 
 ## Note
-- The hyper-parameter settings are not the same as the paper described. Readers can refer to the [paper](https://ieeexplore.ieee.org/document/8063957) for the exact settings of the original paper.
-- Only the WaDIQaM-FR with random crops has been tested.
+- The hyper-parameter or some other experimental settings are not the same as the paper described, e.g., nonoverlapping patches are considered for validation/test images instead of random selection. Readers can refer to the [paper](https://ieeexplore.ieee.org/document/8063957) for the exact settings of the original paper.
+- Warning!. The performance on each database is not guaranteed using the default settings of the code.
