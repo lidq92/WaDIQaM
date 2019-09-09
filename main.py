@@ -653,9 +653,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    args.test_during_training = True  #
-    args.database = 'TID2013'
-
     args.patch_size = 32  #
     args.n_patches = 32  #
     if 'Wa' in args.model:
