@@ -7,4 +7,6 @@ You can refer to the [chainer](https://chainer.org/) codes (only the test part) 
 
 ## Note
 - The hyper-parameter or some other experimental settings are not the same as the paper described, e.g., nonoverlapping patches are considered for validation/test images instead of random selection. Readers can refer to the [paper](https://ieeexplore.ieee.org/document/8063957) for the exact settings of the original paper.
-- Warning!. The performance on each database is not guaranteed using the default settings of the code.
+- Test demo or test cross dataset? Please refer to [test_cross_dataset.py](https://github.com/lidq92/WaDIQaM/blob/master/PyTorch%200.3%20implementation/test_cross_dataset.py). I will upload the new trained model and update this test file when I am free.
+- Warning!. The performance on each database is not guaranteed using the default settings of the code. Reproduced results are welcomed to reported.
+- If you do not have enough memory, then change slightly the code in IQADataset class. Specifically, read image in `__getitem__` instead of  `__init__`.

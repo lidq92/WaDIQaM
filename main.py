@@ -176,7 +176,7 @@ class IQADataset(Dataset):
         for idx in range(len(self.index)):
             # print("Preprocessing Image: {}".format(im_names[idx]))
             im = loader(os.path.join(args.im_dir, im_names[idx]))
-            if args.ref_dir is None or args.model == 'WaDIQaM-NR' or args.model == 'DIQaM-NR':
+            if args.ref_dir is None or 'NR' in args.model:
                 ref = None
             else:
                 ref = loader(os.path.join(args.ref_dir, ref_names[idx]))
