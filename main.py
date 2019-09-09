@@ -117,23 +117,107 @@ def NonOverlappingCropPatches(im, ref=None, patch_size=32):
         return torch.stack(patches)
 
 
-class IQADataset(Dataset):
+class IQADataset_less_memory(Dataset):
     """
-    IQA Dataset
+    IQA Dataset (less memory)
     """
-    def __init__(self, args, status='train', loader=default_loader, n_splits=1000):
+    def __init__(self, args, status='train', loader=default_loader):
         """
         :param args:
         :param status: train/val/test
         :param loader: image loader
-        :param n_splits: number of train/val/test splits that you have prepared (default: 1000)
+        """
+        self.status = status
+        self.patch_size = args.patch_size
+        self.n_patches = args.n_patches
+        self.loader = loader
+
+        Info = h5py.File(args.data_info)
+        index = Info['index']
+        index = index[:, args.exp_id % index.shape[1]]
+        ref_ids = Info['ref_ids'][0, :]  #
+
+        K = args.K_fold
+        k = args.k_test
+        testindex = index[int((k-1)/K * len(index)):int(k/K * len(index))]
+        valindex = index[range(-int((5-k)/K * len(index)), -int((4-k)/K * len(index)))]
+        train_index, val_index, test_index = [], [], []
+        for i in range(len(ref_ids)):
+            if ref_ids[i] in testindex:
+                test_index.append(i)
+            elif ref_ids[i] in valindex:
+                val_index.append(i)
+                train_index.append(i)  #
+            else:
+                train_index.append(i)
+        if 'train' in status:
+            self.index = train_index
+            print("# Train Images: {}".format(len(self.index)))
+        if 'test' in status:
+            self.index = test_index
+            print("# Test Images: {}".format(len(self.index)))
+        if 'val' in status:
+            self.index = val_index
+            print("# Val Images: {}".format(len(self.index)))
+        print('Index:')
+        print(self.index)
+
+        self.scale = Info['subjective_scores'][0, :].max()
+        self.mos = Info['subjective_scores'][0, self.index] / self.scale #
+        self.mos_std = Info['subjective_scoresSTD'][0, self.index] / self.scale #
+        im_names = [Info[Info['im_names'][0, :][i]].value.tobytes()[::2].decode() for i in self.index]
+        ref_names = [Info[Info['ref_names'][0, :][i]].value.tobytes()[::2].decode()
+                     for i in (ref_ids[self.index]-1).astype(int)]
+
+        self.patches = ()
+        self.label = []
+        self.label_std = []
+        self.im_names = []
+        self.ref_names = []
+        for idx in range(len(self.index)):
+            self.im_names.append(os.path.join(args.im_dir, im_names[idx]))
+            if args.ref_dir is None or 'NR' in args.model:
+                self.ref_names.append(None)
+            else:
+                self.ref_names.append(os.path.join(args.ref_dir, ref_names[idx]))
+
+            self.label.append(self.mos[idx])
+            self.label_std.append(self.mos_std[idx])
+
+    def __len__(self):
+        return len(self.index)
+
+    def __getitem__(self, idx):
+        im = self.loader(self.im_names[idx])
+        if self.ref_names[idx] is None:
+            ref = None
+        else:
+            ref = self.loader(self.ref_names[idx])
+
+        if self.status == 'train':
+            patches = RandomCropPatches(im, ref, self.patch_size, self.n_patches)
+        else:
+            patches = NonOverlappingCropPatches(im, ref, self.patch_size)
+        return patches, (torch.Tensor([self.label[idx], ]), torch.Tensor([self.label_std[idx], ]))
+
+
+class IQADataset(Dataset):
+    """
+    IQA Dataset
+    """
+    def __init__(self, args, status='train', loader=default_loader):
+        """
+        :param args:
+        :param status: train/val/test
+        :param loader: image loader
         """
         self.status = status
         self.patch_size = args.patch_size
         self.n_patches = args.n_patches
 
         Info = h5py.File(args.data_info)
-        index = Info['index'][:, args.exp_id % n_splits]  #
+        index = Info['index']
+        index = index[:, args.exp_id % index.shape[1]]
         ref_ids = Info['ref_ids'][0, :]  #
 
         K = args.K_fold
@@ -440,7 +524,7 @@ def get_data_loaders(args):
     :param args: related arguments
     :return: train_loader, val_loader, test_loader, scale
     """
-    train_dataset = IQADataset(args, 'train')
+    train_dataset = IQADataset_less_memory(args, 'train')
     train_loader = torch.utils.data.DataLoader(train_dataset,
                                                batch_size=args.batch_size,
                                                shuffle=True,
