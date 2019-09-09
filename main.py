@@ -188,8 +188,8 @@ class IQADataset(Dataset):
                 self.ims.append(im)
                 self.refs.append(ref)
             elif status == 'test' or status == 'val':
-                # patches = NonOverlappingCropPatches(im, ref, args.patch_size)  # Random or Non Overlapping Crop?
-                patches = RandomCropPatches(im, ref, args.patch_size, args.n_patches)
+                patches = NonOverlappingCropPatches(im, ref, args.patch_size)  # Random or Non Overlapping Crop?
+                # patches = RandomCropPatches(im, ref, args.patch_size, args.n_patches)
                 self.patches = self.patches + (patches,)  #
 
     def __len__(self):
@@ -623,12 +623,12 @@ if __name__ == "__main__":
     parser.add_argument('--decay_ratio', type=int, default=0.8,
                         help='learning rate decay ratio (default: 0.8)')
 
-    parser.add_argument('--exp_id', default=1000, type=int,
+    parser.add_argument('--exp_id', default=0, type=int,
                         help='exp id for train-val-test splits (default: 0)')
     parser.add_argument('--K_fold', type=int, default=5,
                         help='K-fold cross-validation (default: 5)')
-    parser.add_argument('--k_test', type=int, default=1,
-                        help='The k-th fold used for test (1:K-fold, default: 5)')
+    parser.add_argument('--k_test', type=int, default=5,
+                        help='The k-th fold used for test (1:K-fold, default: 5)')  # last 20%
 
     parser.add_argument('--weight_decay', type=float, default=0.0,
                         help='weight decay (default: 0.0)')
