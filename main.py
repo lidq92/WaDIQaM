@@ -759,16 +759,6 @@ if __name__ == "__main__":
         args.im_dir = '/media/ldq/Others/Data/kadid10k/image/'
         args.ref_dir = '/media/ldq/Others/Data/kadid10k/image/'
 
-    if args.database == 'TID2013blur':
-        args.data_info = './data/TID2013info.mat'
-        args.im_dir = '/media/ldq/Research/Data/tid2013/distorted_images/'
-        args.ref_dir = '/media/ldq/Research/Data/tid2013/reference_images/'
-
-    if args.database == 'TID2008blur':
-        args.data_info = './data/TID2008info.mat'
-        args.im_dir = '/media/ldq/Research/Data/tid2008/distorted_images/'
-        args.ref_dir = '/media/ldq/Research/Data/tid2008/reference_images/'
-
     if args.database == 'LIVE':
         args.data_info = './data/LIVEfullinfo.mat'
         args.im_dir = '/media/ldq/Research/Data/databaserelease2/'
