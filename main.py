@@ -541,23 +541,6 @@ def get_data_loaders(args):
     return train_loader, val_loader, test_loader, scale
 
 
-def create_summary_writer(model, data_loader, log_dir='tensorboard_logs'):
-    """ Create Summary Writer for TensorBoard Visualization
-    :param model: model
-    :param data_loader: data loader
-    :param log_dir: log dir
-    :return: writer
-    """
-    writer = SummaryWriter(log_dir=log_dir)
-    data_loader_iter = iter(data_loader)
-    x, y = next(data_loader_iter)
-    try:
-        writer.add_graph(model, x)
-    except Exception as e:
-        print("Failed to save model graph: {}".format(e))
-    return writer
-
-
 def run(args):
     """
     Run the program
@@ -590,7 +573,7 @@ def run(args):
     else:
         print('Wrong model name!')
 
-    writer = create_summary_writer(model, train_loader, args.log_dir)
+    writer = SummaryWriter(log_dir=args.log_dir)
     model = model.to(device)
     print(model)
 
