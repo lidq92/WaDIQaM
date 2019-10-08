@@ -316,6 +316,7 @@ class FRnet(nn.Module):
         self.fc2_q  = nn.Linear(512, 1)
         self.fc1_w  = nn.Linear(512*3, 512)
         self.fc2_w  = nn.Linear(512, 1)
+        self.dropout = nn.Dropout()
         self.weighted_average = weighted_average
 
     def extract_features(self, x):
@@ -369,11 +370,13 @@ class FRnet(nn.Module):
 
             h_ = h  # save intermediate features
 
-            h = F.dropout(F.relu(self.fc1_q(h_)), p=0.5)
+            h = F.relu(self.fc1_q(h_))
+            h = self.dropout(h)
             h = self.fc2_q(h)
 
             if self.weighted_average:
-                w = F.dropout(F.relu(self.fc1_w(h_)), p=0.5)
+                w = F.relu(self.fc1_w(h_))
+                w = self.dropout(w)
                 w = F.relu(self.fc2_w(w)) + 0.000001 # small constant
                 q[i] = torch.sum(h * w) / torch.sum(w)
             else:
@@ -405,6 +408,7 @@ class NRnet(nn.Module):
         self.fc2q_nr = nn.Linear(512, 1)
         self.fc1w_nr = nn.Linear(512, 512)
         self.fc2w_nr = nn.Linear(512, 1)
+        self.dropout = nn.Dropout()
         self.weighted_average = weighted_average
 
     def extract_features(self, x):
@@ -455,11 +459,13 @@ class NRnet(nn.Module):
 
             h_ = h  # save intermediate features
 
-            h = F.dropout(F.relu(self.fc1q_nr(h_)), p=0.5)
+            h = F.relu(self.fc1q_nr(h_))
+            h = self.dropout(h)
             h = self.fc2q_nr(h)
 
             if self.weighted_average:
-                w = F.dropout(F.relu(self.fc1w_nr(h_)), p=0.5)
+                w = F.relu(self.fc1w_nr(h_))
+                w = self.dropout(w)
                 w = F.relu(self.fc2w_nr(w)) + 0.000001  # small constant
                 q[i] = torch.sum(h * w) / torch.sum(w)
             else:
