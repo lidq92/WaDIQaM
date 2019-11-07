@@ -132,7 +132,7 @@ class IQADataset_less_memory(Dataset):
         self.n_patches = args.n_patches
         self.loader = loader
 
-        Info = h5py.File(args.data_info)
+        Info = h5py.File(args.data_info, 'r')
         index = Info['index']
         index = index[:, args.exp_id % index.shape[1]]
         ref_ids = Info['ref_ids'][0, :]  #
@@ -165,8 +165,8 @@ class IQADataset_less_memory(Dataset):
         self.scale = Info['subjective_scores'][0, :].max()
         self.mos = Info['subjective_scores'][0, self.index] / self.scale #
         self.mos_std = Info['subjective_scoresSTD'][0, self.index] / self.scale #
-        im_names = [Info[Info['im_names'][0, :][i]].value.tobytes()[::2].decode() for i in self.index]
-        ref_names = [Info[Info['ref_names'][0, :][i]].value.tobytes()[::2].decode()
+        im_names = [Info[Info['im_names'][0, :][i]][()].tobytes()[::2].decode() for i in self.index]
+        ref_names = [Info[Info['ref_names'][0, :][i]][()].tobytes()[::2].decode()
                      for i in (ref_ids[self.index]-1).astype(int)]
 
         self.patches = ()
@@ -215,7 +215,7 @@ class IQADataset(Dataset):
         self.patch_size = args.patch_size
         self.n_patches = args.n_patches
 
-        Info = h5py.File(args.data_info)
+        Info = h5py.File(args.data_info, 'r')
         index = Info['index']
         index = index[:, args.exp_id % index.shape[1]]
         ref_ids = Info['ref_ids'][0, :]  #
@@ -248,8 +248,8 @@ class IQADataset(Dataset):
         self.scale = Info['subjective_scores'][0, :].max()
         self.mos = Info['subjective_scores'][0, self.index] / self.scale #
         self.mos_std = Info['subjective_scoresSTD'][0, self.index] / self.scale #
-        im_names = [Info[Info['im_names'][0, :][i]].value.tobytes()[::2].decode() for i in self.index]
-        ref_names = [Info[Info['ref_names'][0, :][i]].value.tobytes()[::2].decode()
+        im_names = [Info[Info['im_names'][0, :][i]][()].tobytes()[::2].decode() for i in self.index]
+        ref_names = [Info[Info['ref_names'][0, :][i]][()].tobytes()[::2].decode()
                      for i in (ref_ids[self.index]-1).astype(int)]
 
         self.patches = ()

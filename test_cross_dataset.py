@@ -38,10 +38,10 @@ if __name__ == "__main__":
 
     model.load_state_dict(torch.load(args.model_file))
 
-    Info = h5py.File(args.names_info)
-    im_names = [Info[Info['im_names'][0, :][i]].value.tobytes()\
+    Info = h5py.File(args.names_info, 'r')
+    im_names = [Info[Info['im_names'][0, :][i]][()].tobytes()\
                         [::2].decode() for i in range(len(Info['im_names'][0, :]))]
-    ref_names = [Info[Info['ref_names'][0, :][i]].value.tobytes()\
+    ref_names = [Info[Info['ref_names'][0, :][i]][()].tobytes()\
                         [::2].decode() for i in (Info['ref_ids'][0, :]-1).astype(int)]
 
     model.eval()
