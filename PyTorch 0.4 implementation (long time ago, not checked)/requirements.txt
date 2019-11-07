@@ -1,8 +1,0 @@
-h5py==2.7.1
-numpy==1.14.2
-scipy==1.0.1
-tensorflow-gpu==1.0.0
-torch==0.4.1
-torchvision==0.2.1
-tensorboardX==1.2 # https://github.com/lanpa/tensorboard-pytorch
-pytorch-ignite==0.1.2 # https://github.com/pytorch/ignite

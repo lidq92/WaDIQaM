@@ -9,3 +9,8 @@ You can refer to the [chainer](https://chainer.org/) codes (only the test part) 
 - The hyper-parameter or some other experimental settings are not the same as the paper described, e.g., nonoverlapping patches are considered for validation/test images instead of random selection. Readers can refer to the [paper](https://ieeexplore.ieee.org/document/8063957) for the exact settings of the original paper.
 - Warning!. The performance on each database is not guaranteed using the default settings of the code. Reproduced results are welcomed to reported.
 - If you do not have enough memory, then change slightly the code in `IQADataset` class. Specifically, read image in `__getitem__` instead of  `__init__`. You can choose to use `IQADataset_less_memory` class instead.
+
+## TODO (If I have free time)
+- Simplify the code
+- Report results on some common databases
+- etc.
