@@ -28,6 +28,7 @@ from argparse import ArgumentParser
 
 import os
 import numpy as np
+import random
 from scipy import stats
 import h5py
 from PIL import Image
@@ -774,5 +775,9 @@ if __name__ == "__main__":
                                                                         args.k_test, args.lr, args.batch_size)
 
     torch.manual_seed(args.seed)  #
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    np.random.seed(args.seed)
+    random.seed(args.seed)
 
     run(args)
