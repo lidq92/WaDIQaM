@@ -11,6 +11,6 @@ You can refer to the [chainer](https://chainer.org/) codes (only the test part) 
 - If you do not have enough memory, then change slightly the code in `IQADataset` class. Specifically, read image in `__getitem__` instead of  `__init__`. You can choose to use `IQADataset_less_memory` class instead.
 
 ## TODO (If I have free time)
+- Reproduce the results on some common databases, especially for the NR model (Currently, NR model is not tuned to reproduce the results.)
 - Simplify the code
-- Report results on some common databases
 - etc.
