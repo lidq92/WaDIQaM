@@ -148,7 +148,8 @@ class IQADataset_less_memory(Dataset):
                 test_index.append(i)
             elif ref_ids[i] in valindex:
                 val_index.append(i)
-                train_index.append(i)  #
+                train_index.append(i)  # With this line, the split is actually 8:2 for train and test, but uses a subset of train set for model selection. 
+                # This may be biased, but more data (excluding test set) can be involved in optimizing the model. A standardize way is just like what was done in LinearityIQA/VSFA/etc.
             else:
                 train_index.append(i)
         if 'train' in status:
